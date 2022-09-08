@@ -103,11 +103,15 @@ data "aws_iam_policy_document" "deployment_pipeline_policy" {
       "*"
     ]
   }
-  statement {
-    actions = [
-      "secretsmanager:GetSecretValue",
-    ]
-    resources = var.secret_arns
+  
+  dynamic "statement" {
+    for_each = length(var.secret_arns) > 0 ? [1] : []
+    content {
+      actions = [
+        "secretsmanager:GetSecretValue",
+      ]
+      resources = var.secret_arns
+      }
   }
 }
 
