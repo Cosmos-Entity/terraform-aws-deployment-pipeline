@@ -39,11 +39,6 @@ module "deployment_pipeline" {
   devops_slack_channel_name = var.devops_slack_channel_name
 }
 
-module "api_gateway_account_settings" {
-  source  = "cloudposse/api-gateway/aws//modules/account-settings"
-  version = "0.3.1"
-}
-
 module "api_gateway_webhook_proxy" {
   source = "cloudposse/api-gateway/aws"
   version = "0.3.1"
