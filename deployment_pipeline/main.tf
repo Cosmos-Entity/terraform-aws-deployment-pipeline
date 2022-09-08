@@ -224,7 +224,7 @@ data "aws_iam_policy_document" "deployment_build_policy" {
   }
 
   dynamic "statement" {
-    for_each = length(var.secret_arns) ? [1] : []
+    for_each = length(var.secret_arns) > 0 ? [1] : []
     content {
       actions = [
         "secretsmanager:GetSecretValue",
