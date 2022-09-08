@@ -39,12 +39,47 @@ module "deployment_pipeline" {
   devops_slack_channel_name = var.devops_slack_channel_name
 }
 
+locals {
+  context = {
+    enabled             = true
+    namespace           = null
+    tenant              = null
+    environment         = null
+    stage               = "default"
+    name                = "${var.name}-webhook-proxy"
+    delimiter           = null
+    attributes          = []
+    tags                = {}
+    additional_tag_map  = {}
+    regex_replace_chars = null
+    label_order         = []
+    id_length_limit     = null
+    label_key_case      = null
+    label_value_case    = null
+    descriptor_formats  = {}
+    # Note: we have to use [] instead of null for unset lists due to
+    # https://github.com/hashicorp/terraform/issues/28137
+    # which was not fixed until Terraform 1.0.0,
+    # but we want the default to be all the labels in `label_order`
+    # and we want users to be able to prevent all tag generation
+    # by setting `labels_as_tags` to `[]`, so we need
+    # a different sentinel to indicate "default"
+    labels_as_tags = ["unset"]
+  }
+}
+
+module "api_gateway_account_settings" {
+  source  = "cloudposse/api-gateway/aws/modules/account-settings"
+  version = "0.3.1"
+  context = local.context
+}
+
 module "api_gateway_webhook_proxy" {
   source = "cloudposse/api-gateway/aws"
   version = "0.3.1"
 
-  stage = "default"
-  name = "${var.name}-webhook-proxy"
+  context = local.context
+
   metrics_enabled = true
 
   openapi_config = {
