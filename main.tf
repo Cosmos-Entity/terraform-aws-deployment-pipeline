@@ -45,7 +45,7 @@ locals {
     namespace           = null
     tenant              = null
     environment         = null
-    stage               = null
+    stage               = "default"
     name                = "${var.name}-webhook-proxy"
     delimiter           = null
     attributes          = []
