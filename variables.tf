@@ -2,7 +2,7 @@ variable "name" {
   type = string
 }
 variable "pipelines" {
-  type = list(object({
+  type = map(object({
     name = string
     buildspec = string
     buildspec_test_build = string

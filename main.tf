@@ -14,21 +14,21 @@ data "aws_region" "region" {}
 data "aws_caller_identity" "identity" {}
 
 module "deployment_pipeline" {
-  count = length(var.pipelines)
+  for_each = var.pipelines
   source = "./deployment_pipeline"
 
-  name                             = var.pipelines[count.index].name
+  name                             = var.pipelines[each.key].name
   env                              = var.env
   vpc_id                           = var.vpc_id
   vpc_private_subnets              = var.vpc_private_subnets
   default_security_group_id        = var.default_security_group_id
 
-  buildspec                        = var.pipelines[count.index].buildspec
-  buildspec_test_build             = var.pipelines[count.index].buildspec_test_build
-  buildspec_test_code              = var.pipelines[count.index].buildspec_test_code
+  buildspec                        = var.pipelines[each.key].buildspec
+  buildspec_test_build             = var.pipelines[each.key].buildspec_test_build
+  buildspec_test_code              = var.pipelines[each.key].buildspec_test_code
 
-  environment_variables            = var.pipelines[count.index].environment_variables
-  secret_arns = var.pipelines[count.index].secret_arns
+  environment_variables            = var.pipelines[each.key].environment_variables
+  secret_arns = var.pipelines[each.key].secret_arns
 
   github_repository_name           = var.github_repository_name
   github_organization_name         = var.github_repository_organization
@@ -142,8 +142,8 @@ module "webhook_proxy_lambda" {
   publish = true
 
   environment_variables = merge(
-    {for i, pipeline in var.pipelines: "TARGET_PIPELINE_NAME_${i}" => "${pipeline.name}"},
-    {for i, pipeline in var.pipelines: "TARGET_PIPELINE_REGEXP_${i}" => pipeline.file_path_pattern_trigger},
+    {for key, pipeline in var.pipelines: "TARGET_PIPELINE_NAME_${index(keys(var.pipelines), key)}" => pipeline.name},
+    {for key, pipeline in var.pipelines: "TARGET_PIPELINE_REGEXP_${index(keys(var.pipelines), key)}" => pipeline.file_path_pattern_trigger},
     {GITHUB_WEBHOOK_SECRET = random_password.github_webhook_secret.result},
     {TARGET_GITHUB_REPOSITORY_BRANCH = var.github_repository_branch}
   )
