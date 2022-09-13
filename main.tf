@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "lambda_webhook_proxy_role_iam_policy_document" {
     actions = [
       "codepipeline:StartPipelineExecution",
     ]
-    resources = module.deployment_pipeline.*.codepipeline_arn
+    resources = [for k, pipeline in module.deployment_pipeline: pipeline.codepipeline_arn]
     effect = "Allow"
   }
 }
