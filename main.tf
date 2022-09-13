@@ -71,7 +71,9 @@ locals {
 module "api_gateway_account_settings" {
   source  = "cloudposse/api-gateway/aws//modules/account-settings"
   version = "0.3.1"
-  context = local.context
+
+  name = var.name
+  stage = "default"
 }
 
 module "api_gateway_webhook_proxy" {
