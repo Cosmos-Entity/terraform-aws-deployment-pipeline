@@ -335,7 +335,7 @@ resource "aws_ssm_parameter" "github_webhook_codepipeline_secret" {
   name        = "/${var.name}/github/webhook/deployment-pipeline"
   description = "used by the CICD pipeline to create/destroy github webhooks"
   type        = "SecureString"
-  value       = var.github_webhook_token
+  value       = var.github_access_token
 }
 
 resource "aws_cloudwatch_log_group" "deployment_test_code_log_group" {
@@ -397,7 +397,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
         Owner                = var.github_organization_name
         PollForSourceChanges = false
         Repo                 = var.github_repository_name
-        OAuthToken           = var.github_webhook_token
+        OAuthToken           = var.github_access_token
       }
       output_artifacts = [
         "SourceCode"]

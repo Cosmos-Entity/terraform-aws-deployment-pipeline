@@ -33,7 +33,7 @@ module "deployment_pipeline" {
   github_repository_name           = var.github_repository_name
   github_organization_name         = var.github_repository_organization
   github_repository_branch         = var.github_repository_branch
-  github_webhook_token             = var.github_webhook_token
+  github_access_token              = var.github_access_token
 
   devops_slack_webhook = var.devops_slack_webhook
   devops_slack_channel_name = var.devops_slack_channel_name
