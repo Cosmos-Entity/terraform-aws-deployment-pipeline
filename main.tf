@@ -24,7 +24,6 @@ module "deployment_pipeline" {
   default_security_group_id        = var.default_security_group_id
 
   buildspec                        = var.pipelines[each.key].buildspec
-  buildspec_test_build             = var.pipelines[each.key].buildspec_test_build
   buildspec_test_code              = var.pipelines[each.key].buildspec_test_code
 
   environment_variables            = var.pipelines[each.key].environment_variables

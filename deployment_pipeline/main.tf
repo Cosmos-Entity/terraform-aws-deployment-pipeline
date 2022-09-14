@@ -91,7 +91,6 @@ data "aws_iam_policy_document" "deployment_pipeline_policy" {
     ]
     resources = [
       aws_codebuild_project.deployment_docker_image_build.arn,
-      aws_codebuild_project.deployment_test_build.arn,
       aws_codebuild_project.deployment_test_code.arn,
     ]
   }
@@ -283,53 +282,6 @@ resource "aws_codebuild_project" "deployment_docker_image_build" {
     report_build_status = false
   }
 }
-
-resource "aws_cloudwatch_log_group" "deployment_test_build_log_group" {
-  name              = "${var.name}-deployment-test-build-log-group"
-  retention_in_days = var.cloudwatch_log_retention_in_days
-}
-
-resource "aws_codebuild_project" "deployment_test_build" {
-  vpc_config {
-    security_group_ids = [
-      var.default_security_group_id]
-    subnets = var.vpc_private_subnets
-    vpc_id  = var.vpc_id
-  }
-
-  logs_config {
-    cloudwatch_logs {
-      group_name = aws_cloudwatch_log_group.deployment_test_build_log_group.name
-    }
-  }
-
-  name           = "${var.name}-deployment-test-build"
-  description    = "Tests for ${var.name}"
-  build_timeout  = 20
-  service_role   = aws_iam_role.deployment_build_role.arn
-  encryption_key = data.aws_kms_alias.s3kmskey.arn
-  artifacts {
-    type = "CODEPIPELINE"
-  }
-  cache {
-    type  = "LOCAL"
-    modes = ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]
-  }
-  environment {
-    compute_type                = "BUILD_GENERAL1_MEDIUM"
-    image                       = "aws/codebuild/docker:18.09.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
-
-  }
-  source {
-    type                = "CODEPIPELINE"
-    buildspec           = var.buildspec_test_build
-    report_build_status = false
-  }
-}
-
 
 resource "aws_ssm_parameter" "github_webhook_codepipeline_secret" {
   name        = "/${var.name}/github/webhook/deployment-pipeline"
