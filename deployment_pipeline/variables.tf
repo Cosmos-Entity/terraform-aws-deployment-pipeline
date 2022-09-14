@@ -26,10 +26,6 @@ variable "buildspec" {
   type = string
 }
 
-variable "buildspec_test_build" {
-  type = string
-}
-
 variable "github_access_token" {
   type = string
 }

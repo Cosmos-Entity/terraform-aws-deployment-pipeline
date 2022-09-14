@@ -7,7 +7,6 @@ variable "pipelines" {
   type = map(object({
     name = string
     buildspec = string
-    buildspec_test_build = string
     buildspec_test_code = string
     environment_variables = list(object({name = string, type = string, value = string}))
     secret_arns = list(string)
