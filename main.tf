@@ -109,9 +109,17 @@ data "aws_iam_policy_document" "lambda_webhook_proxy_role_iam_policy_document" {
   }
 }
 
+module "lambda_function_archives" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+  version = "2.2.0"
+
+  bucket        = "${var.name}-deployment-lambda-archives"
+  force_destroy = true
+}
+
 module "webhook_proxy_lambda" {
   source = "terraform-aws-modules/lambda/aws"
-  version = "2.36.0"
+  version = "4.0.1"
 
   function_name = "${var.name}-webhook-proxy"
   description   = ""
@@ -131,6 +139,10 @@ module "webhook_proxy_lambda" {
   memory_size = 128
   timeout = 25
 
+  store_on_s3 = true
+  s3_bucket   = module.lambda_function_archives.s3_bucket_id
+  artifacts_dir = "${path.root}/.terraform/${var.name}-deployment-lambda-artifacts/"
+
   lambda_at_edge = false
   publish = true
 
@@ -143,12 +155,12 @@ module "webhook_proxy_lambda" {
   attach_policy_json = true
   policy_json = data.aws_iam_policy_document.lambda_webhook_proxy_role_iam_policy_document.json
 
-  recreate_missing_package = true
   hash_extra = var.name
 
   attach_cloudwatch_logs_policy = true
   cloudwatch_logs_retention_in_days = var.cloudwatch_log_retention_in_days
 }
+
 resource "aws_lambda_permission" "api_gateway_image_processor_res_lambda_permission" {
   statement_id  = "AllowAPIGatewayRESTInvoke"
   action        = "lambda:InvokeFunction"
