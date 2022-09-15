@@ -159,6 +159,8 @@ module "webhook_proxy_lambda" {
 
   attach_cloudwatch_logs_policy = true
   cloudwatch_logs_retention_in_days = var.cloudwatch_log_retention_in_days
+
+  recreate_missing_package = false
 }
 
 resource "aws_lambda_permission" "api_gateway_image_processor_res_lambda_permission" {
