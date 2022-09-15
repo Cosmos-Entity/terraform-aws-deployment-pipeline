@@ -127,14 +127,7 @@ module "webhook_proxy_lambda" {
   runtime       = "nodejs14.x"
   compatible_architectures = ["x86_64"]
 
-  source_path = [
-    {
-      path     = "${path.module}/lambda-webhook-proxy"
-      commands = [
-        ":zip"
-      ]
-    }
-  ]
+  source_path = "${path.module}/lambda-webhook-proxy"
 
   memory_size = 128
   timeout = 25
@@ -152,10 +145,9 @@ module "webhook_proxy_lambda" {
     {GITHUB_WEBHOOK_SECRET = random_password.github_webhook_secret.result},
     {TARGET_GITHUB_REPOSITORY_BRANCH = var.github_repository_branch}
   )
+
   attach_policy_json = true
   policy_json = data.aws_iam_policy_document.lambda_webhook_proxy_role_iam_policy_document.json
-
-  hash_extra = var.name
 
   attach_cloudwatch_logs_policy = true
   cloudwatch_logs_retention_in_days = var.cloudwatch_log_retention_in_days
