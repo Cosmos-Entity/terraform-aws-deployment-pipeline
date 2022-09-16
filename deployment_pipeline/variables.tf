@@ -61,3 +61,8 @@ variable "devops_slack_channel_name" {
 variable "env" {
   type = string
 }
+
+variable "enable_test_stage" {
+  type = bool
+  default = false
+}

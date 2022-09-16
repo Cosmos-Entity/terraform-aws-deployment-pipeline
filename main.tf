@@ -25,6 +25,7 @@ module "deployment_pipeline" {
 
   buildspec                        = var.pipelines[each.key].buildspec
   buildspec_test_code              = var.pipelines[each.key].buildspec_test_code
+  enable_test_stage                = var.pipelines[each.key].enable_test_stage
 
   environment_variables            = var.pipelines[each.key].environment_variables
   secret_arns = var.pipelines[each.key].secret_arns

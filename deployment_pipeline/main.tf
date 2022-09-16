@@ -291,11 +291,13 @@ resource "aws_ssm_parameter" "github_webhook_codepipeline_secret" {
 }
 
 resource "aws_cloudwatch_log_group" "deployment_test_code_log_group" {
+  count = var.enable_test_stage ? 1 : 0
   name              = "${var.name}-deployment-test-code-log-group"
   retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
 resource "aws_codebuild_project" "deployment_test_code" {
+  count = var.enable_test_stage ? 1 : 0
   name           = "${var.name}-deployment-test-code"
   description    = "Tests for ${var.name}"
   build_timeout  = 20
@@ -304,7 +306,7 @@ resource "aws_codebuild_project" "deployment_test_code" {
 
   logs_config {
     cloudwatch_logs {
-      group_name = aws_cloudwatch_log_group.deployment_test_code_log_group.name
+      group_name = aws_cloudwatch_log_group.deployment_test_code_log_group[0].name
     }
   }
 
@@ -360,34 +362,37 @@ resource "aws_codepipeline" "deployment_pipeline" {
     }
   }
 
-  stage {
-    name = "Test"
-    action {
-      category = "Build"
-      input_artifacts = [
-        "SourceCode"]
-      name = var.name
-      configuration = {
-        ProjectName = aws_codebuild_project.deployment_test_code.name
-        EnvironmentVariables : jsonencode(concat(var.environment_variables,
-        [{
-          name : "REPOSITORY_URI",
-          value : aws_ecr_repository.ecr_repository.repository_url
-        },
-          {
-            name : "AWS_DEFAULT_REGION",
-            value : data.aws_region.current.name
-          }]
-        )
-        )
+  dynamic "stage" {
+    for_each = var.enable_test_stage ? [1] : []
+    content {
+      name = "Test"
+      action {
+        category = "Build"
+        input_artifacts = [
+          "SourceCode"]
+        name = var.name
+        configuration = {
+          ProjectName = aws_codebuild_project.deployment_test_code[0].name
+          EnvironmentVariables : jsonencode(concat(var.environment_variables,
+          [{
+            name : "REPOSITORY_URI",
+            value : aws_ecr_repository.ecr_repository.repository_url
+          },
+            {
+              name : "AWS_DEFAULT_REGION",
+              value : data.aws_region.current.name
+            }]
+          )
+          )
+        }
+        owner     = "AWS"
+        provider  = "CodeBuild"
+        run_order = 2
+        version   = 1
       }
-      owner     = "AWS"
-      provider  = "CodeBuild"
-      run_order = 2
-      version   = 1
     }
   }
-
+  
   stage {
     name = "BuildImage"
     action {

@@ -64,3 +64,8 @@ variable "cloudwatch_log_retention_in_days" {
   default = 180
   description = "Defines how long cloudwatch should retain build logs"
 }
+
+variable "enable_test_stage" {
+  default = true
+  description = "Enables optional test stage in deployment pipeline"
+}
