@@ -89,10 +89,10 @@ data "aws_iam_policy_document" "deployment_pipeline_policy" {
       "codebuild:BatchGetBuilds",
       "codebuild:StartBuild"
     ]
-    resources = [
-      aws_codebuild_project.deployment_docker_image_build.arn,
-      aws_codebuild_project.deployment_test_code.arn,
-    ]
+    resources = concat(
+    [aws_codebuild_project.deployment_docker_image_build.arn],
+      var.enable_test_stage ? [aws_codebuild_project.deployment_test_code[0].arn] : []
+    )
   }
   statement {
     actions = [
