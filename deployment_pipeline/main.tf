@@ -533,8 +533,8 @@ phases:
     - git config --global credential.helper 'store'
     - git config --global user.email '<>'
     - git config --global user.name $GITHUB_USER
-    - echo "https://${GITHUB_USER}:${GITHUB_PASSWORD}@github.com" > ~/.git-credentials
-    - hub clone ${GITHUB_ORG}/${TARGET_GITOPS_REPOSITORY}
+    - echo "https://$GITHUB_USER:$GITHUB_PASSWORD@github.com" > ~/.git-credentials
+    - hub clone $GITHUB_ORG/$TARGET_GITOPS_REPOSITORY
     - cd $TARGET_GITOPS_REPOSITORY
     - |
       export IMAGE_NAME=$(cat build.json | jq .RepositoryUri)
