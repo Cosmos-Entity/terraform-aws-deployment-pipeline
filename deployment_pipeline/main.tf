@@ -510,7 +510,7 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
   }
   source {
     type                = "CODEPIPELINE"
-    buildspec           = EOF<<
+    buildspec           = <<EOF
 version: 0.2
 env:
   secrets-manager:
@@ -555,8 +555,8 @@ phases:
     - git push origin master
     - 'curl -X POST -H "Content-type: application/json" --data "{\"text\":\"New image value has been pushed to gitops repository: $IMAGE_NAME:$IMAGE_TAG\"}" $DEVOPS_WEBHOOK_URL'
 EOF
-report_gitops_status = false
-}
+  report_gitops_status = false
+  }
 }
 
 resource "aws_codepipeline" "deployment_pipeline" {
