@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "deployment_pipeline_policy" {
       "codebuild:StartBuild"
     ]
     resources = concat(
-    [aws_codebuild_project.deployment_docker_image_build.arn],
+    [aws_codebuild_project.deployment_docker_image_build.arn, aws_codebuild_project.deployment_gitops_push.arn],
       var.enable_test_stage ? [aws_codebuild_project.deployment_test_code[0].arn] : []
     )
   }
