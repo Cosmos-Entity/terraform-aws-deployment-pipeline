@@ -489,7 +489,7 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
     }
     environment_variable {
       name  = "DEVOPS_WEBHOOK_URL"
-      type  = "SECRETS_MANAGER"
+      type  = "PLAINTEXT"
       value = var.devops_slack_webhook
     }
     environment_variable {
