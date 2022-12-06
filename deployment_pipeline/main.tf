@@ -516,7 +516,8 @@ phases:
   install:
     commands:
     - apt-get -y update
-    - apt-get -y install git tar xsel yq jq
+    - apt-get -y install git tar xsel jq
+    - wget https://github.com/mikefarah/yq/releases/download/v4.9.6/yq_linux_386 -O /usr/bin/yq && chmod +x /usr/bin/yq
     - wget https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz
     - tar -xzf hub-linux-amd64-2.14.2.tgz
     - cd hub-linux-amd64-2.14.2
