@@ -533,8 +533,8 @@ phases:
     - hub clone $GITHUB_ORG/$TARGET_GITOPS_REPOSITORY
     - cd $TARGET_GITOPS_REPOSITORY
     - |
-      export IMAGE_NAME=$(cat $CODEBUILD_SRC_DIR/build.json | jq .RepositoryUri)
-      export IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR/build.json | jq .Tag)
+      export IMAGE_NAME=$(cat $CODEBUILD_SRC_DIR/build.json | jq .RepositoryUri | tr -d '"')
+      export IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR/build.json | jq .Tag | tr -d '"')
 
       IMAGE_EXISTS=$(yq "contains({\"images\": [{\"name\": \"$IMAGE_NAME\"}]})" kustomization/kustomization.yaml)
 
