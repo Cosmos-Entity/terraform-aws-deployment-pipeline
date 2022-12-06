@@ -30,7 +30,15 @@ variable "github_access_token" {
   type = string
 }
 
+variable "github_access_token_secret_name" {
+  type = string
+}
+
 variable "buildspec_test_code" {
+  type = string
+}
+
+variable "github_user" {
   type = string
 }
 
@@ -65,4 +73,9 @@ variable "env" {
 variable "enable_test_stage" {
   type = bool
   default = false
+}
+
+variable "target_gitops_repository" {
+  type = string
+  description = "Target gitops repository where the image tag update will be pushed (assumes existence of directory kustomization/kustomization.yaml"
 }

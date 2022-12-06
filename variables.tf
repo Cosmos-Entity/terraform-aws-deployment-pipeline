@@ -15,15 +15,25 @@ variable "pipelines" {
   }))
 }
 
+variable "github_user" {
+  type = string
+}
+
 variable "github_repository_name" {
   type = string
   description = "Github repository to be tracked"
 }
 
+variable "github_access_token_secret_name" {
+  type = string
+  description = "Name of the AWS Secrets manager secret that the gitops push job will use to manipulate target gitops repository files. It is mandatory that the secrets_arns also contain this name, otherwise codebuild will not be able to access them"
+}
+
 variable "github_access_token" {
   type = string
-  description = "Github access token with admin permissions for target repository"
+  description = "Github access token with admin permissions for target repository (used for downloading source code by codebuild job)"
 }
+
 variable "github_repository_organization" {
   type = string
   description = "Github organization hosting the target repository"
@@ -64,4 +74,9 @@ variable "env" {
 variable "cloudwatch_log_retention_in_days" {
   default = 180
   description = "Defines how long cloudwatch should retain build logs"
+}
+
+variable "target_gitops_repository" {
+  type = string
+  description = "Target gitops repository where the image tag update will be pushed (assumes existence of directory kustomization/kustomization.yaml"
 }
