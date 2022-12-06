@@ -633,7 +633,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
         "SourceCode"]
       name = var.name
       output_artifacts = [
-        "${var.name}-docker-image"]
+        "build-metadata"]
       owner = "AWS"
       configuration = {
         ProjectName = aws_codebuild_project.deployment_docker_image_build.name
@@ -662,7 +662,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
     action {
       category = "Build"
       input_artifacts = [
-        "${var.name}-docker-image"]
+        "build-metadata"]
       name = var.name
       output_artifacts = []
       owner = "AWS"
