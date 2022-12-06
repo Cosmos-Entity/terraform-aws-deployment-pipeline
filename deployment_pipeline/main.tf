@@ -517,7 +517,7 @@ phases:
     commands:
     - apt-get -y update
     - apt-get -y install git tar xsel jq
-    - wget https://github.com/mikefarah/yq/releases/download/v4.9.6/yq_linux_386 -O /usr/bin/yq && chmod +x /usr/bin/yq
+    - wget https://github.com/mikefarah/yq/releases/download/v4.25.3/yq_linux_386 -O /usr/bin/yq && chmod +x /usr/bin/yq
     - wget https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz
     - tar -xzf hub-linux-amd64-2.14.2.tgz
     - cd hub-linux-amd64-2.14.2
@@ -533,10 +533,8 @@ phases:
     - hub clone $GITHUB_ORG/$TARGET_GITOPS_REPOSITORY
     - cd $TARGET_GITOPS_REPOSITORY
     - |
-      export IMAGE_NAME=$(cat build.json | jq .RepositoryUri)
-      export IMAGE_TAG=$(cat build.json | jq .Tag)
-      IMAGE_NAME=test
-      IMAGE_TAG=test
+      export IMAGE_NAME=$(cat $CODEBUILD_SRC_DIR/build.json | jq .RepositoryUri)
+      export IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR/build.json | jq .Tag)
 
       IMAGE_EXISTS=$(yq "contains({\"images\": [{\"name\": \"$IMAGE_NAME\"}]})" kustomization/kustomization.yaml)
 
