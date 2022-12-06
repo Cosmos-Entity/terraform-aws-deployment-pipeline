@@ -454,7 +454,7 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
   }
   name           = "${var.name}-deployment-gitops"
   description    = "Builds docker images for ${var.name}"
-  gitops_timeout  = 20
+  build_timeout  = 20
   service_role   = aws_iam_role.deployment_gitops_role.arn
   encryption_key = data.aws_kms_alias.s3kmskey.arn
 
@@ -555,7 +555,7 @@ phases:
     - git push origin master
     - 'curl -X POST -H "Content-type: application/json" --data "{\"text\":\"New image value has been pushed to gitops repository: $IMAGE_NAME:$IMAGE_TAG\"}" $DEVOPS_WEBHOOK_URL'
 EOF
-  report_gitops_status = false
+  report_build_status = false
   }
 }
 
