@@ -512,11 +512,6 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
     type                = "CODEPIPELINE"
     buildspec           = <<EOF
 version: 0.2
-env:
-  secrets-manager:
-    GITHUB_TOKEN: GITHUB_TOKEN
-    GITHUB_PASSWORD: GITHUB_TOKEN
-    DEVOPS_WEBHOOK_URL: DEVOPS_WEBHOOK_URL
 phases:
   install:
     commands:
