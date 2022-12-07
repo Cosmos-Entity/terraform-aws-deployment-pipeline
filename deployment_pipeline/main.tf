@@ -546,10 +546,14 @@ phases:
       fi
       if [ -z $(git diff-index --quiet HEAD --) ]; then
         git add kustomization/kustomization.yaml
+
         git commit -m "Updating kustomization/kustomization.yml with value $IMAGE_NAME/$IMAGE_TAG"
         git push origin master
-        COMMIT_URL=https://github.com/$GITHUB_ORG/$TARGET_GITOPS_REPOSITORY/commit/$CODEBUILD_RESOLVED_SOURCE_VERSION
-        curl -X POST -H "Content-type: application/json" --data "{\"text\":\"### Repository: *$TARGET_GITOPS_REPOSITORY* \n\n New image pushed to kustomization/kustomization.yaml: *$IMAGE_NAME:$IMAGE_TAG* \n\n See commit: $COMMIT_URL\"}" $DEVOPS_WEBHOOK_URL
+
+        COMMIT_HASH=$(git log -n 1 --pretty=format:"%H")
+        COMMIT_URL=https://github.com/$GITHUB_ORG/$TARGET_GITOPS_REPOSITORY/commit/$COMMIT_HASH
+
+        curl -X POST -H "Content-type: application/json" --data "{\"text\":\"### Repository: *$TARGET_GITOPS_REPOSITORY* \n\n New image commited to kustomization/kustomization.yaml: *$IMAGE_NAME:$IMAGE_TAG* \n\n See commit: $COMMIT_URL\"}" $DEVOPS_WEBHOOK_URL
       else
         curl -X POST -H "Content-type: application/json" --data "{\"text\":\"### Repository: *$TARGET_GITOPS_REPOSITORY* \n\n No changes made. Kustomization file already contains latest image tag: $IMAGE_NAME:IMAGE_TAG\"}" $DEVOPS_WEBHOOK_URL
       fi
