@@ -540,14 +540,15 @@ phases:
 
       if [ "$IMAGE_EXISTS" = "true" ]
       then
-        yq "(.images[] | select(.name==\"$IMAGE_NAME\") | .newTag) = \"$IMAGE_TAG\"" kustomization/kustomization.yaml
+        yq -i "(.images[] | select(.name==\"$IMAGE_NAME\") | .newTag) = \"$IMAGE_TAG\"" kustomization/kustomization.yaml
       else
-        yq ".images + [{\"name\": \"$IMAGE_NAME\", \"newTag\": \"$IMAGE_TAG\"}]" kustomization/kustomization.yaml
+        yq -i "(.images = .images + [{\"name\": \"$IMAGE_NAME\", \"newTag\": \"$IMAGE_TAG\"}])" kustomization/kustomization.yaml
       fi
     - git add kustomization/kustomization.yaml
     - git commit -m "Updating kustomization/kustomization.yml with value $IMAGE_NAME/$IMAGE_TAG"
     - git push origin master
-    - 'curl -X POST -H "Content-type: application/json" --data "{\"text\":\"New image value has been pushed to gitops repository: $IMAGE_NAME:$IMAGE_TAG\"}" $DEVOPS_WEBHOOK_URL'
+    - COMMIT_URL=https://github.com/$GITHUB_ORG/$TARGET_GITOPS_REPOSITORY/commit/$CODEBUILD_RESOLVED_SOURCE_VERSION
+    - curl -X POST -H "Content-type: application/json" --data "{\"text\":\"New image value has been pushed to $TARGET_GITOPS_REPOSITORY gitops repository \"$TARGET_GITOPS_REPOSITORY\": $IMAGE_NAME:$IMAGE_TAG\, \[see commit\]\($COMMIT_URL\)."}" $DEVOPS_WEBHOOK_URL
 EOF
   report_build_status = false
   }
