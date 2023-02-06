@@ -72,8 +72,8 @@ variable "env" {
 }
 
 variable "cloudwatch_log_retention_in_days" {
-  default = 180
-  description = "Defines how long cloudwatch should retain build logs"
+  default = 90
+  description = "CloudWatch log retention for /aws/lambda/* and cosmos-*-webhook-proxy-api-gateway"
 }
 
 variable "target_gitops_repository" {

@@ -40,6 +40,8 @@ module "deployment_pipeline" {
 
   devops_slack_webhook = var.devops_slack_webhook
   devops_slack_channel_name = var.devops_slack_channel_name
+
+  cloudwatch_log_retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
 locals {

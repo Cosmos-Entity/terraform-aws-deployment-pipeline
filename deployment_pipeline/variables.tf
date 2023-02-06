@@ -3,7 +3,8 @@ variable "name" {
 }
 
 variable "cloudwatch_log_retention_in_days" {
-  default = 180
+  default = 90
+  description = "CloudWatch log retention for pipelines /aws/lambda/*"
 }
 
 variable "vpc_private_subnets" {
@@ -19,7 +20,6 @@ variable "vpc_id" {
 }
 
 variable "environment_variables" {
-  
 }
 
 variable "buildspec" {
