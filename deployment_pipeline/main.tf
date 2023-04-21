@@ -271,7 +271,7 @@ resource "aws_codebuild_project" "deployment_docker_image_build" {
   }
   environment {
     compute_type                = "BUILD_GENERAL1_MEDIUM"
-    image                       = "aws/codebuild/standard:5.0"
+    image                       = "aws/codebuild/docker:18.9.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
@@ -315,7 +315,7 @@ resource "aws_codebuild_project" "deployment_test_code" {
   }
   environment {
     compute_type                = "BUILD_GENERAL1_MEDIUM"
-    image                       = "aws/codebuild/standard:5.0"
+    image                       = "aws/codebuild/docker:18.9.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
