@@ -684,7 +684,7 @@ module "deployment_pipeline_notifications" {
   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
   name          = var.name
   namespace     = ""
-  stage         = ""
+  stage         = var.env
   slack_url     = var.devops_slack_webhook
   slack_channel = var.devops_slack_channel_name
   codepipelines = [aws_codepipeline.deployment_pipeline]
