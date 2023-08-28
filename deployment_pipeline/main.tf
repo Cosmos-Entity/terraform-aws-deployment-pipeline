@@ -680,24 +680,24 @@ resource "aws_codepipeline" "deployment_pipeline" {
   }
 }
 
-# module "deployment_pipeline_notifications" {
-#   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
-#   name          = var.name
-#   namespace     = ""
-#   stage         = var.env
-#   slack_url     = var.devops_slack_webhook
-#   slack_channel = var.devops_slack_channel_name
-#   codepipelines = [aws_codepipeline.deployment_pipeline]
+module "deployment_pipeline_notifications" {
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
+  name          = var.name
+  namespace     = ""
+  stage         = var.env
+  slack_url     = var.devops_slack_webhook
+  slack_channel = var.devops_slack_channel_name
+  codepipelines = [aws_codepipeline.deployment_pipeline]
 
-#   event_type_ids = [
-#     "codepipeline-pipeline-pipeline-execution-failed",
-#     "codepipeline-pipeline-pipeline-execution-canceled",
-#     "codepipeline-pipeline-pipeline-execution-started",
-#     "codepipeline-pipeline-pipeline-execution-resumed",
-#     "codepipeline-pipeline-pipeline-execution-succeeded",
-#     "codepipeline-pipeline-pipeline-execution-superseded"
-#   ]
-# }
+  event_type_ids = [
+    "codepipeline-pipeline-pipeline-execution-failed",
+    "codepipeline-pipeline-pipeline-execution-canceled",
+    "codepipeline-pipeline-pipeline-execution-started",
+    "codepipeline-pipeline-pipeline-execution-resumed",
+    "codepipeline-pipeline-pipeline-execution-succeeded",
+    "codepipeline-pipeline-pipeline-execution-superseded"
+  ]
+}
 
 # module "deployment_pipeline_notifications_failed" {
 #   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
