@@ -66,6 +66,14 @@ variable "devops_slack_channel_name" {
   type = string
 }
 
+variable "devops_slack_webhook_failed" {
+  type = string
+}
+
+variable "devops_slack_channel_name_failed" {
+  type = string
+}
+
 variable "env" {
   type = string
 }
