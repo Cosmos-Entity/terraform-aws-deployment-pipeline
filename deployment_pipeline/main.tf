@@ -706,7 +706,7 @@ module "deployment_pipeline_notifications_failed" {
   stage         = var.env
   slack_url     = var.devops_slack_webhook_failed
   slack_channel = var.devops_slack_channel_name_failed
-  slack_emoji   = ":fire:"
+  slack_emoji   = ":construction:"
   codepipelines = [aws_codepipeline.deployment_pipeline]
 
   event_type_ids = [

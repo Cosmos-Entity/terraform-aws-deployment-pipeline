@@ -66,6 +66,16 @@ variable "devops_slack_channel_name" {
   description = "Slack channel name"
 }
 
+variable "devops_slack_webhook_failed" {
+  type = string
+  description = "Slack webhook where failed pipelines are to be reported"
+}
+
+variable "devops_slack_channel_name_failed" {
+  type = string
+  description = "Slack channel name for failed pipelines notifications"
+}
+
 variable "env" {
   type = string
   description = "Environment name used for resource naming"
