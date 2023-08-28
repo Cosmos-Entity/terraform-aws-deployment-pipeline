@@ -2,6 +2,10 @@ variable "name" {
   type = string
 }
 
+variable "shorter_name" {
+  type = string
+}
+
 variable "cloudwatch_log_retention_in_days" {
   default = 90
   description = "CloudWatch log retention for pipelines /aws/lambda/*"

@@ -701,7 +701,7 @@ module "deployment_pipeline_notifications" {
 
 module "deployment_pipeline_notifications_failed" {
   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.2.0"
-  name          = "${var.name}-f"
+  name          = "${var.shorter_name}-failed"
   namespace     = ""
   stage         = var.env
   slack_url     = var.devops_slack_webhook_failed

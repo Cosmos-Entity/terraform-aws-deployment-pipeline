@@ -18,6 +18,7 @@ module "deployment_pipeline" {
   source = "./deployment_pipeline"
 
   name                             = var.pipelines[each.key].name
+  shorter_name                     = var.pipelines[each.key].shorter_name
   env                              = var.env
   vpc_id                           = var.vpc_id
   vpc_private_subnets              = var.vpc_private_subnets

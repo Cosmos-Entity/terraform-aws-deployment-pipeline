@@ -3,6 +3,11 @@ variable "name" {
   description = "Name used for resource naming"
 }
 
+variable "shorter_name" {
+  type = string
+  description = "Shorter name used for resource naming (e.g. without project name), when standard names are too long"
+}
+
 variable "pipelines" {
   type = map(object({
     name = string
