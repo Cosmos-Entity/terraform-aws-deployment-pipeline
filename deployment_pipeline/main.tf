@@ -681,7 +681,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
 }
 
 module "deployment_pipeline_notifications" {
-  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.2.0"
   name          = var.name
   namespace     = ""
   stage         = var.env
@@ -699,18 +699,18 @@ module "deployment_pipeline_notifications" {
   ]
 }
 
-# module "deployment_pipeline_notifications_failed" {
-#   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
-#   name          = "${var.shorter_name}-failed"
-#   namespace     = ""
-#   stage         = var.env
-#   slack_url     = var.devops_slack_webhook_failed
-#   slack_channel = var.devops_slack_channel_name_failed
-#   slack_emoji   = ":construction:"
-#   codepipelines = [aws_codepipeline.deployment_pipeline]
+module "deployment_pipeline_notifications_failed" {
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.2.0"
+  name          = "${var.shorter_name}-failed"
+  namespace     = ""
+  stage         = var.env
+  slack_url     = var.devops_slack_webhook_failed
+  slack_channel = var.devops_slack_channel_name_failed
+  slack_emoji   = ":construction:"
+  codepipelines = [aws_codepipeline.deployment_pipeline]
 
-#   event_type_ids = [
-#     "codepipeline-pipeline-pipeline-execution-failed",
-#     "codepipeline-pipeline-pipeline-execution-canceled"
-#   ]
-# }
+  event_type_ids = [
+    "codepipeline-pipeline-pipeline-execution-failed",
+    "codepipeline-pipeline-pipeline-execution-canceled"
+  ]
+}
