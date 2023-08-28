@@ -681,7 +681,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
 }
 
 module "deployment_pipeline_notifications" {
-  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.2.0"
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
   name          = var.name
   namespace     = ""
   stage         = var.env
