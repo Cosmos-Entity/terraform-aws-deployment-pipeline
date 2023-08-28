@@ -6,6 +6,7 @@ variable "name" {
 variable "pipelines" {
   type = map(object({
     name = string
+    shorter_name = string
     buildspec = string
     buildspec_test_code = string
     environment_variables = list(object({name = string, type = string, value = string}))
