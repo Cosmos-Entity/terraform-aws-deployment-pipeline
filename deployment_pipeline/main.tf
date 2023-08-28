@@ -680,6 +680,8 @@ resource "aws_codepipeline" "deployment_pipeline" {
   }
 }
 
+# using the module github.com/kjagiello/terraform-aws-codepipeline-slack-notifications for the same AWS CodePipeline is possible only for different versions (as below v1.1.6 and v1.2.0)
+# due to small differences in the definition of the resource aws_codestarnotifications_notification_rule, if the same version is used the error "AlreadyExists" will occur
 module "deployment_pipeline_notifications" {
   source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
   name          = var.name
