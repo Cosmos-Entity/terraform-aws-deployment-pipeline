@@ -38,8 +38,10 @@ module "deployment_pipeline" {
   github_access_token_secret_name = var.github_access_token_secret_name
   target_gitops_repository = var.target_gitops_repository
 
-  devops_slack_webhook = var.devops_slack_webhook
-  devops_slack_channel_name = var.devops_slack_channel_name
+  devops_slack_webhook             = var.devops_slack_webhook
+  devops_slack_channel_name        = var.devops_slack_channel_name
+  devops_slack_webhook_failed      = var.devops_slack_webhook_failed
+  devops_slack_channel_name_failed = var.devops_slack_channel_name_failed
 
   cloudwatch_log_retention_in_days = var.cloudwatch_log_retention_in_days
 }
