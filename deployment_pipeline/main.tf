@@ -297,12 +297,8 @@ resource "aws_cloudwatch_log_group" "deployment_test_code_log_group" {
 }
 
 resource "aws_codebuild_project" "deployment_test_code" {
-  vpc_config {
-    security_group_ids = [
-      var.default_security_group_id]
-    subnets = var.vpc_private_subnets
-    vpc_id  = var.vpc_id
-  }
+  # don't configure VPC_config to not have access to AWS RDS databases
+  
   count = var.enable_test_stage ? 1 : 0
   name           = "${var.name}-deployment-test-code"
   description    = "Tests for ${var.name}"
