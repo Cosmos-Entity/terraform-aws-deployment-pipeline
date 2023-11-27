@@ -100,4 +100,4 @@ module "deployment_pipeline_cosmos_graphql_repository" {
 
 ## How to use deployment pipeline module in your project?
 
-The terraform `aws-deployment-pipeline` module was used in the Cosmos project for [creating a CI/CD pipeline for docker images](https://airnauts.atlassian.net/wiki/spaces/COS/pages/232325131/Adding+a+new+service#1.--AWS---Creating-a-CI%2FCD-pipeline-for-docker-images).
+The `aws-deployment-pipeline` terraform module was used in the Cosmos project for [creating a CI/CD pipeline for docker images](https://airnauts.atlassian.net/wiki/spaces/COS/pages/232325131/Adding+a+new+service#1.--AWS---Creating-a-CI%2FCD-pipeline-for-docker-images).
