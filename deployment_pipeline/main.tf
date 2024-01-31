@@ -485,11 +485,6 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
       value = var.github_user
     }
     environment_variable {
-      name  = "GITHUB_ORG"
-      type  = "PLAINTEXT"
-      value = var.github_organization_name
-    }
-    environment_variable {
       name  = "DEVOPS_WEBHOOK_URL"
       type  = "PLAINTEXT"
       value = var.devops_slack_webhook
@@ -508,6 +503,11 @@ resource "aws_codebuild_project" "deployment_gitops_push" {
       name  = "TARGET_GITOPS_REPOSITORY"
       type  = "PLAINTEXT"
       value = var.target_gitops_repository
+    }
+    environment_variable {
+      name  = "GITOPS_REPOSITORY_ORGANIZATION"
+      type  = "PLAINTEXT"
+      value = coalesce(var.target_gitops_organization_name, var.github_organization_name)
     }
   }
   source {
@@ -533,7 +533,7 @@ phases:
     - git config --global user.email '<>'
     - git config --global user.name $GITHUB_USER
     - echo "https://$GITHUB_USER:$GITHUB_PASSWORD@github.com" > ~/.git-credentials
-    - hub clone $GITHUB_ORG/$TARGET_GITOPS_REPOSITORY
+    - hub clone $GITOPS_REPOSITORY_ORGANIZATION/$TARGET_GITOPS_REPOSITORY
     - cd $TARGET_GITOPS_REPOSITORY
     - |
       export IMAGE_NAME=$(cat $CODEBUILD_SRC_DIR/build.json | jq .RepositoryUri | tr -d '"')
@@ -554,7 +554,7 @@ phases:
         git push origin master
 
         COMMIT_HASH=$(git log -n 1 --pretty=format:"%H")
-        COMMIT_URL=https://github.com/$GITHUB_ORG/$TARGET_GITOPS_REPOSITORY/commit/$COMMIT_HASH
+        COMMIT_URL=https://github.com/$GITOPS_REPOSITORY_ORGANIZATION/$TARGET_GITOPS_REPOSITORY/commit/$COMMIT_HASH
 
         curl -k -X POST -H "Content-type: application/json" --data "{\"text\":\"### Repository: *$TARGET_GITOPS_REPOSITORY* \n\n New image commited to kustomization/kustomization.yaml: *$IMAGE_NAME:$IMAGE_TAG* \n\n See commit: $COMMIT_URL\"}" $DEVOPS_WEBHOOK_URL
       else

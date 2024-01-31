@@ -87,6 +87,12 @@ variable "cloudwatch_log_retention_in_days" {
   description = "CloudWatch log retention for /aws/lambda/* and cosmos-*-webhook-proxy-api-gateway"
 }
 
+variable "target_gitops_organization_name" {
+  type = string
+  description = "Gitops organization hosting the target gitops repository. If not provided, defaults to github_organization_name"
+  default = ""
+}
+
 variable "target_gitops_repository" {
   type = string
   description = "Target gitops repository where the image tag update will be pushed (assumes existence of directory kustomization/kustomization.yaml"
