@@ -134,7 +134,7 @@ module "webhook_proxy_lambda" {
   function_name = "${var.name}-webhook-proxy"
   description   = ""
   handler       = "index.githubWebhookListener"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   compatible_architectures = ["x86_64"]
 
   source_path = "${path.module}/lambda-webhook-proxy"
