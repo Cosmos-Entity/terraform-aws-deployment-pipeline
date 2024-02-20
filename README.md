@@ -64,7 +64,7 @@ module "deployment_pipeline_cosmos_graphql_repository" {
 
   github_repository_organization = "Airnauts"
   github_repository_name         = "cosmos-graphql"
-  github_repository_branch       = "dev
+  github_repository_branch       = "dev"
   github_access_token            = local.github_access_token
 
   devops_slack_webhook             = local.devops_slack_webhook
