@@ -29,16 +29,16 @@ module "deployment_pipeline" {
   enable_test_stage                = var.pipelines[each.key].enable_test_stage
 
   environment_variables            = var.pipelines[each.key].environment_variables
-  secret_arns = var.pipelines[each.key].secret_arns
+  secret_arns                      = var.pipelines[each.key].secret_arns
 
-  github_repository_name          = var.github_repository_name
-  github_user                     = var.github_user
-  github_organization_name        = var.github_repository_organization
-  github_repository_branch        = var.github_repository_branch
-  github_access_token             = var.github_access_token
-  github_access_token_secret_name = var.github_access_token_secret_name
-  target_gitops_repository        = var.target_gitops_repository
-  target_gitops_organization_name = var.target_gitops_organization_name
+  github_repository_name           = var.github_repository_name
+  github_user                      = var.github_user
+  github_organization_name         = var.github_repository_organization
+  github_repository_branch         = var.github_repository_branch
+  github_access_token              = var.github_access_token
+  github_access_token_secret_name  = var.github_access_token_secret_name
+  target_gitops_repository         = var.target_gitops_repository
+  target_gitops_organization_name  = var.target_gitops_organization_name
 
   devops_slack_webhook             = var.devops_slack_webhook
   devops_slack_channel_name        = var.devops_slack_channel_name

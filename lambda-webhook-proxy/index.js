@@ -125,7 +125,7 @@ exports.githubWebhookListener = async (event, context, callback) => {
     console.log("Triggering pipelines: ", pipelinesToRun)
 
     let errors = [];
-    const client = new CodePipelineClient(config);
+    const client = new CodePipelineClient();
 
     for (const pipelineName of pipelinesToRun.values()) {
         const params = {
@@ -143,9 +143,10 @@ exports.githubWebhookListener = async (event, context, callback) => {
     if (errors.length > 0) {
         const response = {
             statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 failed_requests: errors
-            }),
+            }, null, 2),
         };
 
         return callback(null, response);
@@ -153,9 +154,10 @@ exports.githubWebhookListener = async (event, context, callback) => {
 
     const response = {
         statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             input: event,
-        }),
+        }, null, 2),
     };
 
     return callback(null, response);
