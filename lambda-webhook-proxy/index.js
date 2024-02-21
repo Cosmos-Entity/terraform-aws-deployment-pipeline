@@ -1,5 +1,6 @@
 const crypto = require('crypto');
-const AWS = require("aws-sdk");
+
+import { CodePipelineClient, StartPipelineExecutionCommand } from "@aws-sdk/client-codepipeline";
 
 function signRequestBody(key, body) {
     return `sha256=${crypto.createHmac('sha256', key).update(body, 'utf-8').digest('hex')}`;
@@ -123,13 +124,31 @@ exports.githubWebhookListener = async (event, context, callback) => {
 
     console.log("Triggering pipelines: ", pipelinesToRun)
 
-    const codepipeline = new AWS.CodePipeline();
+    let errors = [];
+    const client = new CodePipelineClient(config);
+
     for (const pipelineName of pipelinesToRun.values()) {
         const params = {
             name: pipelineName
         };
 
-        const res = await codepipeline.startPipelineExecution(params).promise()
+        let result;
+        try {
+            result = await client.send()
+        } catch (err) {
+            errors.push({ request: params, error: err });
+        }
+    }
+
+    if (errors.length > 0) {
+        const response = {
+            statusCode: 500,
+            body: JSON.stringify({
+                failed_requests: errors
+            }),
+        };
+
+        return callback(null, response);
     }
 
     const response = {

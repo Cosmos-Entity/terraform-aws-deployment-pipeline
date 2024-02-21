@@ -53,7 +53,7 @@ Optional vars, defaults values in brackets:
 
 ```hcl
 module "deployment_pipeline_cosmos_graphql_repository" {
-  source = "github.com/Airnauts/terraform-aws-deployment-pipeline.git?ref=v0.0.68"
+  source = "github.com/Airnauts/terraform-aws-deployment-pipeline.git?ref=v0.0.72"
 
   name = "cosmos-graphql"
   env  = "dev"
