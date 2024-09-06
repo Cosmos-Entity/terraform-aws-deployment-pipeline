@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">= 1.0.0"
   required_providers {
     github = {
       source  = "hashicorp/github"
@@ -6,7 +7,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.22"
+      version = "< 5.0.0"
     }
   }
 }
