@@ -518,6 +518,7 @@ version: 0.2
 phases:
   install:
     commands:
+    - wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg | true
     - apt-get -y update
     - apt-get -y install git tar xsel jq
     - wget https://github.com/mikefarah/yq/releases/download/v4.25.3/yq_linux_386 -O /usr/bin/yq && chmod +x /usr/bin/yq

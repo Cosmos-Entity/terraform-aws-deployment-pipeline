@@ -1,6 +1,5 @@
 const crypto = require('crypto');
-
-import { CodePipelineClient, StartPipelineExecutionCommand } from "@aws-sdk/client-codepipeline";
+const { CodePipelineClient, StartPipelineExecutionCommand } = require("@aws-sdk/client-codepipeline");
 
 function signRequestBody(key, body) {
     return `sha256=${crypto.createHmac('sha256', key).update(body, 'utf-8').digest('hex')}`;
@@ -134,7 +133,7 @@ exports.githubWebhookListener = async (event, context, callback) => {
 
         let result;
         try {
-            result = await client.send()
+            result = await client.send(new StartPipelineExecutionCommand(params));
         } catch (err) {
             errors.push({ request: params, error: err });
         }
