@@ -122,8 +122,23 @@ resource "aws_iam_role_policy" "deployment_pipeline_role_policy" {
 
 resource "aws_s3_bucket" "deployment_pipeline_artifacts" {
   bucket        = "${data.aws_caller_identity.aws_identity.account_id}-${var.name}-pipeline-data"
-  acl           = "private"
   force_destroy = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "deployment_pipeline_artifacts" {
+  bucket = aws_s3_bucket.deployment_pipeline_artifacts.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "deployment_pipeline_artifacts" {
+  bucket = aws_s3_bucket.deployment_pipeline_artifacts.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_cloudwatch_log_group" "deployment_docker_image_build_log_group" {
@@ -686,7 +701,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
 # using the module github.com/kjagiello/terraform-aws-codepipeline-slack-notifications for the same AWS CodePipeline is possible only for different versions (as below v1.1.6 and v1.2.0)
 # due to small differences in the definition of the resource aws_codestarnotifications_notification_rule, if the same version is used the error "AlreadyExists" will occur
 module "deployment_pipeline_notifications" {
-  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.1.6"
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v3.1.0"
   name          = var.name
   namespace     = ""
   stage         = var.env
@@ -694,18 +709,18 @@ module "deployment_pipeline_notifications" {
   slack_channel = var.devops_slack_channel_name
   codepipelines = [aws_codepipeline.deployment_pipeline]
 
-  event_type_ids = [
-    "codepipeline-pipeline-pipeline-execution-failed",
-    "codepipeline-pipeline-pipeline-execution-canceled",
-    "codepipeline-pipeline-pipeline-execution-started",
-    "codepipeline-pipeline-pipeline-execution-resumed",
-    "codepipeline-pipeline-pipeline-execution-succeeded",
-    "codepipeline-pipeline-pipeline-execution-superseded"
+  pipeline_event_type_ids = [
+    "started",
+    "failed",
+    "canceled",
+    "resumed",
+    "succeeded",
+    "superseded"
   ]
 }
 
 module "deployment_pipeline_notifications_failed" {
-  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v1.2.0"
+  source        = "github.com/kjagiello/terraform-aws-codepipeline-slack-notifications?ref=v3.1.0"
   name          = "${var.shorter_name}-failed"
   namespace     = ""
   stage         = var.env
@@ -714,8 +729,8 @@ module "deployment_pipeline_notifications_failed" {
   slack_emoji   = ":construction:"
   codepipelines = [aws_codepipeline.deployment_pipeline]
 
-  event_type_ids = [
-    "codepipeline-pipeline-pipeline-execution-failed",
-    "codepipeline-pipeline-pipeline-execution-canceled"
+  pipeline_event_type_ids = [
+    "failed",
+    "canceled"
   ]
 }
