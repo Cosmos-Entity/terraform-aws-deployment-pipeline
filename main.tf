@@ -1,13 +1,13 @@
 terraform {
-  required_version = ">= 1.7.5"
+  required_version = ">= 1.0.0"
   required_providers {
     github = {
-      source  = "integrations/github"
-      version = "~> 6.0"
+      source  = "hashicorp/github"
+      version = "4.24.1"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.72.1"
+      version = "< 5.0.0"
     }
   }
 }
@@ -80,7 +80,7 @@ locals {
 
 module "api_gateway_webhook_proxy" {
   source = "cloudposse/api-gateway/aws"
-  version = "0.7.1"
+  version = "0.3.1"
 
   context = local.context
 
@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "lambda_webhook_proxy_role_iam_policy_document" {
 
 module "lambda_function_archives" {
   source = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.2.1"
+  version = "2.2.0"
 
   bucket        = "${var.name}-deployment-lambda-archives"
   force_destroy = true
